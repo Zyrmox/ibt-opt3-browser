@@ -15,6 +15,9 @@ class RegistrationInvite extends Model
     ];
 
     public static function email(string $token) {
+        if ($token == null) {
+            abort(403);
+        }
         return ($result = self::where('token', $token))->exists() ? $result->first()->email : '';
     }
 }
