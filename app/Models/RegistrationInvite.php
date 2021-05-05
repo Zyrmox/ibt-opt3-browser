@@ -14,7 +14,7 @@ class RegistrationInvite extends Model
         'token',
     ];
 
-    public static function email(string $token) {
+    public static function email($token) {
         if ($token == null) {
             abort(403);
         }
