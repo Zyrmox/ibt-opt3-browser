@@ -1,0 +1,43 @@
+{
+    "Profile Information": "Profilové informace",
+    "Update your account's profile information and email address.": "Upravte si své profilové jméno nebo e-mailovou adresu.",
+    "Name": "Jméno",
+    "Email": "E-mail",
+
+    "Update Password": "Změnit heslo",
+    "Ensure your account is using a long, random password to stay secure.": "Ujistěte se, že je Vaše heslo dostatečně dlouhé a silné.",
+    "Current Password": "Současné heslo",
+    "New Password": "Nové heslo",
+    "Confirm Password": "Potvrďte nové heslo",
+
+    "Two Factor Authentication": "Dvoufaktorové ověření",
+    "Add additional security to your account using two factor authentication.": "Přidejte dodatečnou ochranu vašeho účtu v podobě dvoufaktorového ověření.",
+    "You have enabled two factor authentication.": "Používáte dvoufaktorové ověření.",
+    "You have not enabled two factor authentication.": "Nepoužíváte dvoufaktorové ověření",
+    "When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone's Google Authenticator application.": "Pokud-li používáte dvoufaktorové ověření, budete při přihlášení požádání požádání o unikátně vygenerovaný kód. Ten můžete získat pomocí tvého mobilního telefonu v aplikaci Google Authenticator.",
+    "Two factor authentication is now enabled. Scan the following QR code using your phone's authenticator application.": "Dvoufaktorové ověření je zapnuté. Nascanujte následující QR kód pomocí autentifikační aplikace na vašem chytrém telefonním zařízení.",
+    "Store these recovery codes in a secure password manager. They can be used to recover access to your account if your two factor authentication device is lost.": "Doporučujeme vám si tyto záchranné kódy uložit. Mohou být využity k obnovení přístupu k vašemu účtu v případě, že je vaše autentifikační zařízení ztraceno.",
+    "Regenerate Recovery Codes": "Znovu vygenerovat záchranné kódy",
+    "Show Recovery Codes": "Zobrazit záchranné kódy",
+
+    "Browser Sessions": "Prohlédnout sezení (sessions)",
+    "Manage and log out your active sessions on other browsers and devices.": "Spravujte a odhlašujte aktivní sezení, přihlášená k vašemu účtu na připojených zařízení.",
+    "If necessary, you may log out of all of your other browser sessions across all of your devices. Some of your recent sessions are listed below; however, this list may not be exhaustive. If you feel your account has been compromised, you should also update your password.": "V případě nutnosti odhlašte všechna aktivní přihlášení k vašemu účtu ze všech zařízení.",
+    "This device": "Aktuálně používané zařízení",
+    "Last active": "Naposledy aktivní",
+    "Log Out Other Browser Sessions": "Odhlásit se ze všech přihlášených zařízení",
+    "Please enter your password to confirm you would like to log out of your other browser sessions across all of your devices.": "Zadejte prosím heslo k vašemu účtu pro potvrzení požadované akce.",
+
+    "Delete Account": "Odstranit účet",
+    "Permanently delete your account.": "Nenávratně odstraní váš účet.",
+    "Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.": "V případě odstranění vašeho účetu dojde ke smazání veškerých ostatních dat asociovaných s tímto účtem. Zálohujte / stáhněte tedy veškerá nezbytná data, která si přejete uchovat.",
+    "Are you sure you want to delete your account? Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.": "Opravdu si přejete smazat tento účet? V případě odstranění vašeho účetu dojde ke smazání veškerých ostatních dat asociovaných s vaším účtem. Potvrďte prosím, že opravdu chcete nenávratně odstranit váš účet z aplikace.",
+    "Password": "Heslo",
+
+    "Save": "Uložit",
+    "Saved.": "Uloženo.",
+    "Enable": "Povolit",
+    "Disable": "Zakázat",
+    "Done.": "Hotovo.",
+    "Cancel": "Zrušit"
+}
