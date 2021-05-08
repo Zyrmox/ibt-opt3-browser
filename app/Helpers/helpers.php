@@ -94,16 +94,3 @@ if (!function_exists('noDatabaseFileExists()')) {
         return DatabaseFile::noDatabaseFileExists();
     }
 }
-
-if (!function_exists('collectionHelper()')) {    
-        
-    /**
-     * Returns CollectionHelper class container instance
-     *
-     * @return App\Helpers\CollectionHelper
-     */
-    function collectionHelper()
-    {
-        return app(CollectionHelper::class);
-    }
-}

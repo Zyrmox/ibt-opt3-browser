@@ -21,6 +21,9 @@ class MaterialsInsight extends Component
     public $groupByAmount = self::GROUP_BY_DESC;
     public $groupByMaterialsCount = self::GROUP_BY_DESC;
 
+    public $recordsPerWarehouse;
+    public $totalRecordsPerWarehouse;
+
     const VIEW_MATERIALS_TABLE = 'materials-table';
     const VIEW_WAREHOUSES_TABLE = 'warehouses-table';
 
@@ -55,6 +58,10 @@ class MaterialsInsight extends Component
     
     public function mount() {
         $this->substituted = SubstitutionToggle::state();
+        $this->recordsPerWarehouse = Material::allWareHouses()->get()->values()->pluck('whouseID')->flip()->map(function($warehouse){
+            return 25;
+        });
+        $this->totalRecordsPerWarehouse = Material::allWareHouses()->get()->pluck('count', 'whouseID');
     }
 
     public function substitutionToggleChanged($value) {
@@ -77,15 +84,22 @@ class MaterialsInsight extends Component
         return $this->view == $viewName;
     }
 
+    public function updatePerWarehouseListAmount($whouseId) {
+        $this->recordsPerWarehouse->put($whouseId, $this->recordsPerWarehouse->get($whouseId) + 25);
+    }
+
+    public function getTotalWarehouseRecordsCount($whouseId) {
+        return (int) $this->totalRecordsPerWarehouse->get($whouseId);
+    }
+
     public function render()
     {
         $materials = Material::groupBy('sId')->orderBy('amount', $this->groupByAmount)->paginate($this->paginationCount);
 
         $warehouses = Material::allWareHouses()->paginate($this->paginationCount);
+
         foreach($warehouses as $index => $warehouse) {
-            $warehouse->materials = Material::materialsInWarehouse($warehouse->whouseID)->paginate($this->paginationCount, ['*'], 'warehouse' . $index . 'Page');
-            // $warehouse->materials = Material::materialsInWarehouse($warehouse->whouseID)->paginate($this->paginationCount);
-            // $warehouse->materials->setPageName('warehouse' . $index . 'Page');
+            $warehouse->materials = Material::materialsInWarehouse($warehouse->whouseID)->take($this->recordsPerWarehouse->get($warehouse->whouseID))->orderByDesc('amount')->get();
         }
         return view('livewire.pages.insights.materials-insight', [
             'materials' => $materials,

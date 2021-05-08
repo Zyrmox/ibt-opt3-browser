@@ -44,14 +44,16 @@
     
                     </div>
                     
-                    <div>
-                        <label for="paginationCount" class="mr-2 font-medium">Záznamů na stránku:</label>
-                        <select wire:model="paginationCount" name="paginationCount" class="rounded-md focus:outline-none bg-white border-none shadow-inner">
-                            <option>25</option>
-                            <option>50</option>
-                            <option>100</option>
-                        </select>
-                    </div>
+                    @if ($this->viewIs(MaterialsInsight::VIEW_MATERIALS_TABLE))
+                        <div>
+                            <label for="paginationCount" class="mr-2 font-medium">Záznamů na stránku:</label>
+                            <select wire:model="paginationCount" name="paginationCount" class="rounded-md focus:outline-none bg-white border-none shadow-inner">
+                                <option>25</option>
+                                <option>50</option>
+                                <option>100</option>
+                            </select>
+                        </div>
+                    @endif
                 </form>
             </div>
         </div>
@@ -165,8 +167,13 @@
                             Sklad: <span class="font-medium ml-2">{{ $warehouse->whouseID }}</span>
                         </p>
                     </x-slot>
-
-                    {{ $warehouse->materials->links() }}
+                    <x-slot name="header">
+                        @if ((count($warehouse->materials)) > 0)
+                            <p class="font-medium">
+                                <span class="font-semibold ml-2 text-theme-500">{{ $this->getTotalWarehouseRecordsCount($warehouse->whouseID) }}x</span>&nbsp; uložených materiálů
+                            </p>
+                        @endif
+                    </x-slot>
 
                     <table class="w-full divide-y divide-gray-200 mt-6 border-theme-600 border">
                         <thead class="bg-gray-50">
@@ -204,6 +211,15 @@
                             @endforeach
                         </tbody>
                     </table>
+
+                    @if ($this->getTotalWarehouseRecordsCount($warehouse->whouseID) > $recordsPerWarehouse->get($warehouse->whouseID))
+                        <div class="mt-4 flex flex-col justify-center items-center">
+                            <button wire:click="updatePerWarehouseListAmount('{{ $warehouse->whouseID }}')" class="py-3 px-6 font-semibold text-xs uppercase bg-theme-900 text-white">Načíst další záznamy</button>
+                            <div class="mt-4">
+                                Zobrazeno <span class="font-medium">{{ count($warehouse->materials) }} z {{ $this->getTotalWarehouseRecordsCount($warehouse->whouseID) }} celkových záznamů</span>
+                            </div>
+                        </div>
+                    @endif
                 </x-molecules.compressed-expandable-card>
             @endforeach
         @endif

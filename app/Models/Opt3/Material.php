@@ -50,7 +50,7 @@ class Material extends Model
     public static function allWareHouses() {
         return DB::connection('tenant')
             ->table('materials')
-            ->select('whouseID')
+            ->select('whouseID', DB::raw('COUNT(whouseID) as count'))
             ->groupBy('whouseID');
     }
 

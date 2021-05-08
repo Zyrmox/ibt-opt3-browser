@@ -66,7 +66,7 @@
                         </div>
                     </div>
                     <div class="ml-8">
-                        <label for="paginationCount" class="mr-2 font-medium">Záznamů na stránku:</label>
+                        <label for="paginationCount" class="mr-2 font-medium">Termínů na stránku:</label>
                         <select wire:model="paginationCount" name="paginationCount" class="rounded-md focus:outline-none bg-white border-none shadow-inner">
                             <option>25</option>
                             <option>50</option>
@@ -107,13 +107,13 @@
                             <x-molecules.compressed-expandable-card wire:key="{{ $deadline->deadline }}" class="bg-theme-300 shadow-inner">
                                 <x-slot name="title">
                                     <p>
-                                        Počet výrobních příkazů:
+                                        Celkový počet výrobních příkazů:
                                         <span class="font-medium ml-2">{{ count(VP::whereDeadline($deadline->deadline)->get()) }}x</span>
                                     </p>
                                 </x-slot>
 
                                 <div>
-                                    @foreach (VP::whereDeadline($deadline->deadline)->get() as $key => $vp)
+                                    @foreach (VP::whereDeadline($deadline->deadline)->take($this->recordsPerManufOrder->get($deadline->deadline))->get() as $key => $vp)
                                         <x-molecules.compressed-expandable-card wire:key="{{ $vp->sId }}" class="bg-white shadow-inner">
                                             <x-slot name="title">
                                                 <svg class="h-3 w-3 text-yellow-500" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -151,6 +151,15 @@
                                             </table>
                                         </x-molecules.compressed-expandable-card>
                                     @endforeach
+
+                                    @if ($this->getTotalManufOrderRecordsCount($deadline->deadline) > $recordsPerManufOrder->get($deadline->deadline))
+                                        <div class="mt-4 flex flex-col justify-center items-center">
+                                            <button wire:click="updatePerManufOrderListAmount('{{ $deadline->deadline }}')" class="py-3 px-6 font-semibold text-xs uppercase bg-theme-900 text-white">Načíst další záznamy</button>
+                                            <div class="mt-4">
+                                                Zobrazeno <span class="font-medium">{{ count(VP::whereDeadline($deadline->deadline)->take($this->recordsPerManufOrder->get($deadline->deadline))->get()) }} z {{ $this->getTotalManufOrderRecordsCount($deadline->deadline) }} celkových záznamů</span>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
                             </x-molecules.compressed-expandable-card>
                         </div>

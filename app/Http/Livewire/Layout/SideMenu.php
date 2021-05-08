@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Layout;
 use App\Models\DatabaseFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -20,6 +21,7 @@ class SideMenu extends Component
     private $lastActiveTabSessionKey = 'lastActiveTab';
     public $default = 'insights';
     public $currentTab;
+    public $currentUrl;
 
     public $files;
 
@@ -39,6 +41,7 @@ class SideMenu extends Component
         $this->path = $request->path();
         $this->fetchTabsData();
         $this->currentTab = session($this->lastActiveTabSessionKey, $this->default);
+        $this->currentUrl = url()->current();
     }
 
     public function updatedFile() {
@@ -59,22 +62,46 @@ class SideMenu extends Component
         $file->user()->associate(Auth::user());
         $file->url = $name;
         $file->original_name = $this->file->getClientOriginalName();
-        $file->save();
 
         $this->file = null;
         $this->iteration++;
 
+        /**
+         * Testing schema of uploaded database file for all tables
+         */
+        $file_saved = $this->validateUploadedDatabaseSchema($file);
+        if ($file_saved == null) {
+            return;
+        }
         $this->fetchTabsData();
 
         if (currentTenantDBFile() == null && $noDBFile) {
             $this->switchDatabase($file);
+            return redirect()->to($this->path);
         }
-        return redirect()->to($this->path);
     }
 
     public function switchDatabase(DatabaseFile $database) {
         Auth::user()->changeDatabaseFile($database);
         return redirect()->to($this->path);
+    }
+
+    public function validateUploadedDatabaseSchema(DatabaseFile $database) {
+        $required_tables = [
+            "cProp", "JobInOperation", "JobResource", "Jobs", "LogOpts", "Materials",
+            "MatEvents", "Ownership", "ResCalendar", "Resources", "VP",
+        ];
+        $database->makeCurrent();
+        $schema = Schema::connection('tenant');
+        foreach ($required_tables as $table) {
+            if (!$schema->hasTable($table)) {
+                // session()->flash('error', sprintf('Tabulka "%s" nebyla ve schématu nahrávané databáze nalezena!', $table));
+                $this->addError('file', sprintf('Tabulka "%s" nebyla nalezena ve schématu nahrávaného databázového souboru.', $table));
+                return null;
+            }
+        }
+        
+        return $database->save();
     }
 
     public function downloadDatabase(DatabaseFile $database) {

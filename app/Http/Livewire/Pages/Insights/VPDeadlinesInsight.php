@@ -19,6 +19,9 @@ class VPDeadlinesInsight extends Component
     public $filterByType = self::FILTER_ALL;
     public $sortByDate = self::SORT_BY_DATE_OLDEST;
 
+    public $recordsPerManufOrder;
+    public $totalRecordsPerManufOrder;
+
     const FILTER_ALL = 'all-deadlines';
     const FILTER_DUE = 'future-deadlines';
     const FILTER_PAST_DUE = 'past-deadlines';
@@ -49,6 +52,10 @@ class VPDeadlinesInsight extends Component
     
     public function mount() {
         $this->substituted = SubstitutionToggle::state();
+        $this->recordsPerManufOrder = VP::deadlinesWithCount()->get()->values()->pluck('deadline')->flip()->map(function(){
+            return 25;
+        });
+        $this->totalRecordsPerManufOrder = VP::deadlinesWithCount()->get()->values()->pluck('vps_count', 'deadline');
     }
 
     public function substitutionToggleChanged($value) {
@@ -61,6 +68,14 @@ class VPDeadlinesInsight extends Component
 
     public function updatedFilterByType() {
         $this->resetPage();
+    }
+
+    public function updatePerManufOrderListAmount($deadline) {
+        $this->recordsPerManufOrder->put($deadline, $this->recordsPerManufOrder->get($deadline) + 25);
+    }
+
+    public function getTotalManufOrderRecordsCount($deadline) {
+        return (int) $this->totalRecordsPerManufOrder->get($deadline);
     }
 
     public function render()
