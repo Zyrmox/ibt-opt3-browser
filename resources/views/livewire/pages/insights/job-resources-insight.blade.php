@@ -32,7 +32,7 @@
 
             <div class="mt-3">
                 @foreach ($fullJobs as $key => $job)
-                    <x-molecules.compressed-expandable-card class="bg-white" wire:key="{{ $job->sId }}">
+                    <x-molecules.compressed-expandable-card class="bg-white" wire:key="{{ $job->sId }}" :expanded="true">
                         <x-slot name="title">
                             <svg class="h-3 w-3 text-theme-500" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="12" cy="12" r="12" fill="currentColor"/>

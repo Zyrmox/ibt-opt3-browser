@@ -46,7 +46,7 @@
             <div class="mt-3">
                 @if (count($resources) > 0)
                     @foreach ($resources as $key => $resource)
-                        <x-molecules.compressed-expandable-card class="bg-white" wire:key="{{ $resource->sId }}">
+                        <x-molecules.compressed-expandable-card class="bg-white" wire:key="{{ $resource->sId }}" :expanded="true">
                             <x-slot name="title">
                                 <svg class="h-3 w-3 text-pink-600" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="12" cy="12" r="12" fill="currentColor"/>

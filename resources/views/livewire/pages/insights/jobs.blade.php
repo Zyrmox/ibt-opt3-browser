@@ -43,7 +43,7 @@
 
         <div class="mt-3">
             @forelse ($operations as $key => $job)
-                <x-molecules.compressed-expandable-card class="bg-white" wire:key="{{ $job->sId }}">
+                <x-molecules.compressed-expandable-card class="bg-white" wire:key="{{ $job->sId }}" :expanded="true">
                     <x-slot name="title">
                         @if ($job->isFullOp())
                             <svg class="h-4 w-4 text-theme-500" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

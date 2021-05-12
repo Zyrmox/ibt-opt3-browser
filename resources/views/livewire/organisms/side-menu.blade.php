@@ -41,7 +41,7 @@
                     </x-jet-responsive-nav-link>
 
                     <!-- Accounts Management -->
-                    <x-jet-responsive-nav-link href="{{ route('user.accounts') }}" :active="request()->routeIs('user.acounts')">
+                    <x-jet-responsive-nav-link href="{{ route('user.accounts') }}" :active="request()->routeIs('user.accounts')">
                         {{ __('Uživatelské účty') }}
                     </x-jet-responsive-nav-link>
 

@@ -11,7 +11,7 @@
 
             <x-jet-section-border />
 
-            @livewire('organisms.invitations-form')
+            {{-- @livewire('organisms.invitations-form') --}}
         </div>
     </div>
 </x-app-layout>
