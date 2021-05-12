@@ -1,4 +1,10 @@
 <div>
+    <!--
+        Manufacturing Orders (česky VP) Deadlines View - Fullpage Livewire Component
+        Controller for this component: App/Http/Livewire/Pages/Insights/VPDeadlinesInsight.php
+    
+        Author: Petr Vrtal (xvrtal01@stud.fit.vutbr.cz)
+    -->
     <x-slot name="header">
         <h2 class="font-semibold text-2xl sticky">
             {{ __('Deadlines (VP)') }}
@@ -81,15 +87,17 @@
             </div>
 
             <div class="max-w-full w-full overflow-x-auto flex flex-col items-start pb-6">
-                @foreach ($deadlines as $deadline)
+                @forelse ($deadlines as $deadline)
                     <div class="p-3 mb-4 bg-white shadow-md flex-shrink-0 w-full">
                         <div class="flex justify-between flex-wrap items-center">
                             <div class="flex">
-                                <span class="mr-2 p-1 bg-yellow-100 text-yellow-500 rounded-md">
-                                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                    </svg>
-                                </span>
+                                @if ($deadline->isDeadlinePastDue())
+                                    <span class="mr-2 p-1 bg-yellow-100 text-yellow-500 rounded-md">
+                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                        </svg>
+                                    </span>
+                                @endif
                                 <p class="font-medium sticky">
                                     {{ dateFromDateTime($deadline->deadline) }}
                                 </p>
@@ -113,44 +121,44 @@
                                 </x-slot>
 
                                 <div>
-                                    @foreach (VP::whereDeadline($deadline->deadline)->take($this->recordsPerManufOrder->get($deadline->deadline))->get() as $key => $vp)
-                                        <x-molecules.compressed-expandable-card wire:key="{{ $vp->sId }}" class="bg-white shadow-inner">
-                                            <x-slot name="title">
-                                                <svg class="h-3 w-3 text-yellow-500" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <circle cx="12" cy="12" r="12" fill="currentColor"/>
-                                                </svg>
-                                                
-                                                <a href="{{ route('insights.vp', $vp->sId) }}" title="{{ $vp->sId }}" class="ml-2 font-medium hover:underline">
-                                                    @if($substituted)
-                                                        {{ $vp->short_id }}
-                                                    @else
-                                                        {{ $vp->sId }}
-                                                    @endif
-                                                </a>
-                                            </x-slot>
-                            
-                                            <table class="w-full divide-y divide-gray-200 mt-6 border-theme-600 border">
-                                                <thead class="bg-gray-50">
+                                    @if (VP::whereDeadline($deadline->deadline)->take($this->recordsPerManufOrder->get($deadline->deadline))->first()->exists())
+                                        <table class="w-full divide-y divide-gray-200 border-theme-600 border">
+                                            <thead class="bg-gray-50 relative">
+                                                <tr>
+                                                    @foreach(VP::whereDeadline($deadline->deadline)->take($this->recordsPerManufOrder->get($deadline->deadline))->first()->getFilteredAttributes() as $key => $val)
+                                                        <th scope="col" class="sticky top-0 px-6 py-3 text-left text-xs font-medium text-theme-900 bg-theme-400 uppercase tracking-wider">
+                                                            {{ $key }}
+                                                        </th>
+                                                    @endforeach
+                                                </tr>
+                                            </thead>
+                                            <tbody class="bg-white divide-y divide-gray-200">
+                                                @foreach (VP::whereDeadline($deadline->deadline)->take($this->recordsPerManufOrder->get($deadline->deadline))->get() as $key => $vp)
                                                     <tr>
-                                                        @foreach($vp->getFilteredAttributes() as $key => $val)
-                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-theme-900 bg-theme-400 uppercase tracking-wider">
-                                                                {{ $key }}
-                                                            </th>
+                                                        @foreach($vp->getFilteredAttributes() as $key => $attr)
+                                                            <td class="px-6 py-4 whitespace-nowrap font-medium">
+                                                                @if ($key == 'sId') 
+                                                                    <svg class="inline mr-2 h-3 w-3 text-yellow-500" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                        <circle cx="12" cy="12" r="12" fill="currentColor"/>
+                                                                    </svg>
+                                                                    
+                                                                    <a href="{{ route('insights.vp', $vp->sId) }}" title="{{ $vp->sId }}" class="ml-2 hover:underline">
+                                                                        @if($substituted)
+                                                                            {{ $vp->short_id }}
+                                                                        @else
+                                                                            {{ $attr }}
+                                                                        @endif
+                                                                    </a>
+                                                                @else
+                                                                    {{ $attr == null ? '-' : $attr }}
+                                                                @endif
+                                                            </td>
                                                         @endforeach
                                                     </tr>
-                                                </thead>
-                                                <tbody class="bg-white divide-y divide-gray-200">
-                                                    <tr>
-                                                    @foreach($vp->getFilteredAttributes() as $key => $val)
-                                                        <td class="px-6 py-4 whitespace-nowrap font-medium">
-                                                            {{ $val != null ? $val : '-' }}
-                                                        </td>
-                                                    @endforeach
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </x-molecules.compressed-expandable-card>
-                                    @endforeach
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    @endif
 
                                     @if ($this->getTotalManufOrderRecordsCount($deadline->deadline) > $recordsPerManufOrder->get($deadline->deadline))
                                         <div class="mt-4 flex flex-col justify-center items-center">
@@ -164,7 +172,9 @@
                             </x-molecules.compressed-expandable-card>
                         </div>
                     </div>
-                @endforeach
+                @empty
+                    Žádný záznam
+                @endforelse
             </div>
         </div>
 
@@ -173,6 +183,7 @@
             <div class="mt-6" id='calendar' wire:ignore></div>
         </div>
     </div>
+    {{-- Using third party Javascript Fullcalendar.js Library for displaying events in calendar --}}
     @push('styles')
         <link rel="stylesheet" href="{{ mix('css/fullcalendar.css') }}">
     @endpush
@@ -191,4 +202,5 @@
             });
         </script>
     @endprepend
+    {{-------------------------------------------------------------------------------------------}}
 </div>

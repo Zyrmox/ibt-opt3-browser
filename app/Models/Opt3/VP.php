@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Manufacturing Order Model - representing  table "VP"
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 namespace App\Models\Opt3;
 
 use App\Traits\Filterable;
@@ -116,12 +120,23 @@ class VP extends Model
     /**
      * Groups rows by its priority in groups
      *
+     * @param string $sorting sorting of group, either 'asc' or 'desc'
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public static function groupByPriority($sorting) {
         return self::query()
             ->orderBy('priority', $sorting)
             ->get()
+            ->groupBy('priority');
+    }
+
+    /**
+     * Returns manufacturing order's entity count based on its priority
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function ordersWithCountBasedOnPriority() {
+        return self::select('priority', DB::raw('COUNT(priority) as vps_count'))
             ->groupBy('priority');
     }
     

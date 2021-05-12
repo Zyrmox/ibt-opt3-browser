@@ -1,4 +1,10 @@
 <div {{ $attributes->merge(['class' => 'shadow-md flex flex-col border border-theme-600 text-sm overflow-auto z-10 relative']) }} x-data="{ expanded: {{ $expanded ? 'true' : 'false'}} }">
+    <!--
+        Compressed (small) Expandable Card - Laravel Component
+        Controller for this component: App/View/Components/Molecules/CompressedExpandableCard.php
+    
+        Author: Petr Vrtal (xvrtal01@stud.fit.vutbr.cz)
+    -->
     <div class="flex items-center justify-between px-4 py-3">
         <div class="flex items-center">
             <button class="px-2 py-2 bg-gray-600 bg-opacity-0 hover:bg-opacity-5 rounded-full mr-4 focus:outline-none" @click="expanded = !expanded">

@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Job Model - representing data from "jobs" table
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 namespace App\Models\Opt3;
 
 use App\Traits\Filterable;
@@ -17,10 +21,12 @@ class Job extends Model
         GloballySearchable,
         HasContextChannels;
 
+    /* Specifies database connection interface to be used for querying */
     protected $connection = 'tenant';
     protected $primaryKey = 'sId';
     protected $keyType = 'string';
 
+    /* All possible types (forms) of Job in manufacturing task */
     const TYPE_ALL = -1;
     const TYPE_FULL_OP = 0;
     const TYPE_PHASE_OP_INST = 2;
@@ -30,6 +36,11 @@ class Job extends Model
     const TYPE_MAINTANANCE = 6;
     const TYPE_COOPERATION = 7;
 
+    /**
+     * Types to names (string) mapping
+     *
+     * @var array
+     */
     static $types = [
         self::TYPE_FULL_OP => [
             'cathegory' => 'Plná operace',
@@ -81,7 +92,7 @@ class Job extends Model
         self::TYPE_PHASE_OP_ITER,
         self::TYPE_PHASE_OP_FIN,
     ];
-
+    
     protected $color = 'theme-500';
         
     /**
@@ -95,12 +106,18 @@ class Job extends Model
         'transportTime', 'productsId', 'standingTime', 'rmOptions'
     ];
 
+    /**
+     * Attributes to be filtered using Filterable trait
+     *
+     * @var array
+     */
     protected $filterable = [
         'sId', 'type', 'amount', 'productsId', 'standingTime',
     ];
 
     /**
      * Set substitution group name to be used in short_id table
+     * overshadowing method from trait Namable
      *
      * @return string
      */
@@ -109,6 +126,12 @@ class Job extends Model
         return str_replace(' ', '_', mb_strtolower($this->getTypeName(), 'UTF-8'));
     }
 
+    /**
+     * Set substitution position aka index to be used in short_id table
+     * overshadowing method from trait Namable
+     *
+     * @return string
+     */
     public function setSubstitutionPosition()
     {
         if (!$this->isFullOp()) {
@@ -138,11 +161,21 @@ class Job extends Model
             ],
         ];
     }
-
+    
+    /**
+     * Returns model instance primary key
+     *
+     * @return static
+     */
     public static function primaryKey() {
         return (new static)->getKeyName();
     }
-
+    
+    /**
+     * Returns all instances of type Full operation and Cooperation
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public static function fullOpsAndCoops() {
         return self::query()
             ->where('type', self::TYPE_FULL_OP)
@@ -150,7 +183,7 @@ class Job extends Model
     }
     
     /**
-     * phaseOperations
+     * Returns collection of all instances with Phase operation type
      *
      * @return Collection
      */
@@ -163,7 +196,7 @@ class Job extends Model
     }
     
     /**
-     * fullOperation
+     * Returns collection of all instances with Full operation type
      *
      * @return Collection
      */
@@ -174,7 +207,12 @@ class Job extends Model
             ->where('ownership.tobjsid', parent::__get('sId'))
             ->get();
     }
-
+    
+    /**
+     * Returns all Manufacturing orders with relation to this model's instance
+     *
+     * @return void
+     */
     public function VPs() {
         return VP::query()
             ->join('ownership', 'ownership.fobjsid', 'vp.sId')
@@ -184,16 +222,16 @@ class Job extends Model
     }
 
     /**
-     * fullOperation
+     * Returns collection of all model instances with type Full operation
      *
      * @return Collection
      */
     public static function fullOps() {
-        return Job::where('type', 0);
+        return Job::where('type', self::TYPE_FULL_OP);
     }
     
     /**
-     * jobResources
+     * Returns collection of JobResource models record with relation to this model's instance
      *
      * @return Collection
      */
@@ -219,7 +257,7 @@ class Job extends Model
     }
     
     /**
-     * resources
+     * Returns collection of all Resources model instances with relation to this model's instance
      *
      * @return Collection
      */
@@ -230,44 +268,96 @@ class Job extends Model
             ->where('jobresource.jobsId', parent::__get('sId'))
             ->get();
     }
-
+    
+    /**
+     * Check job type
+     *
+     * @param  mixed $type
+     * @return void
+     */
     public function ofType($type) {
         return $this->type == $type;
     }
-
+    
+    /**
+     * Returns query for all operations of certain type
+     *
+     * @param  mixed $type
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public static function getOpsOfType($type) {
         return self::query()
             ->where('type', $type);
     }
-
+    
+    /**
+     * Type to name mapping
+     *
+     * @return string
+     */
     public function getTypeName() {
         return self::$types[$this->type]["cathegory"];
     }
-
+    
+    /**
+     * Check, whether operation is full or not
+     *
+     * @return bool
+     */
     public function isFullOp() : bool {
         return $this->type == 0;
     }
 
+    /**
+     * Check, whether operation is phase operation
+     *
+     * @return bool
+     */
     public function isPhaseOp() : bool {
         return in_array(intval($this->type), self::$phaseOpsTypes, true);
     }
 
+    /**
+     * Check, whether operation is cooperation
+     *
+     * @return bool
+     */
     public function isCoop(): bool {
         return $this->type == self::TYPE_COOPERATION;
     }
 
+    /**
+     * Returns operation cathegory name
+     *
+     * @return string
+     */
     public function opCathegory() : string {
         return self::$types[$this->type]["cathegory"];
     }
 
+    /**
+     * Returns operation type
+     *
+     * @return string
+     */
     public function opType() : string {
         return self::$types[$this->type]["full"];
     }
 
+    /**
+     * Returns short representation of operation type 
+     *
+     * @return string
+     */
     public function opTypeShort() : string {
         return self::$types[$this->type]["short"] ? self::$types[$this->type]["short"] : $this->opType();
     }
 
+    /**
+     * Returns coresponding text color
+     *
+     * @return string
+     */
     public function color() {
         return 'text-' . $this->color;
     }

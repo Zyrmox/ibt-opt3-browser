@@ -1,4 +1,10 @@
 <div {{ $attributes->merge(['class' => 'p-4 shadow-md rounded flex flex-col my-3 text-sm overflow-auto relative']) }} x-data="{ expanded: {{ $expanded ? 'true' : 'false'}} }">
+    <!--
+        Expandable Card - Laravel Component
+        Controller for this component: App/View/Components/Molecules/ExpandableCard.php
+    
+        Author: Petr Vrtal (xvrtal01@stud.fit.vutbr.cz)
+    -->
     <div class="flex items-center justify-between">
         <div class="flex items-center">
             @if (!$disabled)

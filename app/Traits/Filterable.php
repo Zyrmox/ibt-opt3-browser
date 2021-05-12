@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Trait Filterable used to filter and format
+ * default parrent class entity attributes
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 namespace App\Traits;
 
 trait Filterable
@@ -9,6 +14,7 @@ trait Filterable
 
     protected function initializeFilterable()
     {
+        // If parent class overrides formatFilteredFields method, use its returned array
         if (method_exists($this, 'formatFilteredFields')) {
             $this->replaceable = self::formatFilteredFields();
         }
@@ -17,7 +23,14 @@ trait Filterable
             $this->filterableArr = $this->filterable;
         }
     }
-
+    
+    /**
+     * Filteres models entity attributes and formats them to specific format
+     * using predefined syntax
+     *
+     * @param  mixed $keepIdAttr if set true UUID of entity won't get filtered away
+     * @return void
+     */
     public function getFilteredAttributes($keepIdAttr = true) {
         $attributes = $this->getAttributes();
 

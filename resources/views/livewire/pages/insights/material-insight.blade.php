@@ -1,7 +1,13 @@
 <div>
+    <!--
+        Specific Material View - Fullpage Livewire Component
+        Controller for this component: App/Http/Livewire/Pages/Insights/MaterialInsight.php
+    
+        Author: Petr Vrtal (xvrtal01@stud.fit.vutbr.cz)
+    -->
     <x-slot name="header">
         <div class="flex items-center">
-            <livewire:atoms.return-navigation-button />
+            <livewire:molecules.return-navigation-button />
             <h2 class="font-semibold text-2xl">
                 Materiál
             </h2>
@@ -18,10 +24,9 @@
                 </p>
             </div>
         </div>
-        {{-- @if (!$job->isFullOp())
-            <p class="uppercase font-semibold">{{ $job->opType() }}</p>
-        @endif --}}
     </x-slot>
+
+    <x-molecules.loading-state-notification />
     
     <div class="container mx-auto">
         <div class="bg-white p-6 shadow-md rounded-md flex flex-col text-sm">

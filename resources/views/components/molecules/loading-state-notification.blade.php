@@ -1,4 +1,10 @@
 <div>
+    <!--
+        Loading State Notification Toast - Laravel Component
+        Controller for this component: App/View/Components/Molecules/LoadingStateNotification.php
+    
+        Author: Petr Vrtal (xvrtal01@stud.fit.vutbr.cz)
+    -->
     <div wire:loading class="z-30 absolute bottom-6 right-6 flex justify-between items-center py-3 px-6 text-sm bg-theme-900 text-gray-50 rounded shadow-md"
         x-transition:enter="transition ease-out duration-200"
         x-transition:enter-start="opacity-0 transform translate-x-8"

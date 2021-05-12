@@ -1,7 +1,13 @@
 <div>
+    <!--
+        Specific Job View - Fullpage Livewire Component
+        Controller for this component: App/Http/Livewire/Pages/Insights/JobInsight.php
+    
+        Author: Petr Vrtal (xvrtal01@stud.fit.vutbr.cz)
+    -->
     <x-slot name="header">
         <div class="flex items-center">
-            <livewire:atoms.return-navigation-button />
+            <livewire:molecules.return-navigation-button />
             <h2 class="font-semibold text-2xl">
                 {{ $job->opCathegory() }}
             </h2>

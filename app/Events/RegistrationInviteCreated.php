@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Listentener for invitation creation
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 namespace App\Events;
 
 use App\Models\RegistrationInvite;

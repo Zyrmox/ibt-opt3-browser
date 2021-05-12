@@ -28,14 +28,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Fixes error with string length
         Schema::defaultStringLength(191);
 
+        // Register DatabaseFile model observer
         DatabaseFile::observe(DatabaseFileObserver::class);
 
+        // Creates map for polymorphic relation between specified models
         Relation::morphMap([
             CProp::TYPE_OPERATION => 'App\Models\Opt3\Job',
             CProp::TYPE_RESOURCE_MACHINE => 'App\Models\Opt3\Resource',
-            CProp::TYPE_RESOURCE_TOOL => 'App\Models\Opt3\ResourceTool',
         ]);
     }
 }

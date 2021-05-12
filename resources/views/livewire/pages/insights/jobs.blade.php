@@ -1,4 +1,10 @@
 <div>
+    <!--
+        Jobs View - Fullpage Livewire Component
+        Controller for this component: App/Http/Livewire/Pages/Insights/Jobs.php
+    
+        Author: Petr Vrtal (xvrtal01@stud.fit.vutbr.cz)
+    -->
     <x-slot name="header">
         <h2 class="font-semibold text-2xl sticky">
             {{ __('Výrobní operace') }}

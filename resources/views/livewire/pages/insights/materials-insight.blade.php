@@ -1,4 +1,10 @@
 <div>
+    <!--
+        Materials View - Fullpage Livewire Component
+        Controller for this component: App/Http/Livewire/Pages/Insights/MaterialsInsight.php
+    
+        Author: Petr Vrtal (xvrtal01@stud.fit.vutbr.cz)
+    -->
     <x-slot name="header">
         <h2 class="font-semibold text-2xl">
             {{ __('Materiály v úloze') }}
@@ -96,7 +102,7 @@
                                                 @endif
                                             </a>
                                         @else
-                                            {{ $attr }}
+                                            {{ $attr == null ? '-' : $attr }}
                                         @endif
                                     </td>
                                 @endforeach

@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Livewire Fullpage Component Controller - Displays specified Material
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 namespace App\Http\Livewire\Pages\Insights;
 
 use App\Http\Livewire\Molecules\SubstitutionToggle;
@@ -45,6 +49,11 @@ class MaterialsInsight extends Component
         self::GROUP_BY_ASC => 'Podle množství materiálu ve skladě vzestupně',
     ];
 
+    /**
+     * Automatically generate and manage query strings per defined variables
+     *
+     * @var array
+     */
     protected $queryString = [
         'paginationCount' => ['except' => self::PAGINATION_DEFAULT_COUNT],
         'view' => ['except' => self::VIEW_MATERIALS_TABLE],
@@ -52,10 +61,20 @@ class MaterialsInsight extends Component
         'groupByMaterialsCount' => ['except' => self::GROUP_BY_DESC],
     ];
 
+    /**
+     * Listens for these emmited events and calls coresponding class method
+     *
+     * @var array
+     */
     protected $listeners = [
         SubstitutionToggle::ONCHANGED_EVENT_KEY => 'substitutionToggleChanged',
     ];
     
+    /**
+     * Gets called on component mount
+     *
+     * @return void
+     */
     public function mount() {
         $this->substituted = SubstitutionToggle::state();
         $this->recordsPerWarehouse = Material::allWareHouses()->get()->values()->pluck('whouseID')->flip()->map(function($warehouse){
@@ -64,6 +83,12 @@ class MaterialsInsight extends Component
         $this->totalRecordsPerWarehouse = Material::allWareHouses()->get()->pluck('count', 'whouseID');
     }
 
+    /**
+     * Updates substitution toggle value (state),
+     *
+     * @param  mixed $value new substitution toggle state
+     * @return void
+     */
     public function substitutionToggleChanged($value) {
         $this->substituted = $value;
     }
@@ -95,7 +120,6 @@ class MaterialsInsight extends Component
     public function render()
     {
         $materials = Material::groupBy('sId')->orderBy('amount', $this->groupByAmount)->paginate($this->paginationCount);
-
         $warehouses = Material::allWareHouses()->paginate($this->paginationCount);
 
         foreach($warehouses as $index => $warehouse) {

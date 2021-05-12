@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Database File observer - used when deleting database files
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 namespace App\Observers;
 
 use App\Models\DatabaseFile;
@@ -38,12 +42,15 @@ class DatabaseFileObserver
      */
     public function deleted(DatabaseFile $databaseFile)
     {
-        // Storage::disk('databases')->delete($databaseFile->url);
+        // If database file exists in storage delete it
         if(File::exists($databaseFile->path())){
             File::delete($databaseFile->path());
         }
+
+        // Also delete all substitution made for objects of this file
         shortId()->delete($databaseFile);
 
+        // If any user of the application is currently connected to the file we disconnects all of them
         foreach ($databaseFile->currentUsers as $user) {
             $user->clearDatabaseFile();
         }

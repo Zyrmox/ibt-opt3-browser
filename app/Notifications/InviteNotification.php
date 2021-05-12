@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * E-mail notification used to compose MailMessage that will
+ * be send to user in the form of registration invite.
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
@@ -50,10 +55,10 @@ class InviteNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->greeting('Dobrý den!')
-                    ->line(sprintf("%s - %s.", 'Obdržel jste pozvánku k registraci do webové aplikace', config('app.name', 'SQLite browser')))
-                    ->action('Zaregistrovat se', $this->url)
-                    ->line('Děkujeme za využívání naší aplikace');
+            ->greeting('Dobrý den!')
+            ->line(sprintf("%s - %s.", 'Obdržel jste pozvánku k registraci do webové aplikace', config('app.name', 'SQLite browser')))
+            ->action('Zaregistrovat se', $this->url)
+            ->line('Děkujeme za využívání naší aplikace');
     }
 
     /**

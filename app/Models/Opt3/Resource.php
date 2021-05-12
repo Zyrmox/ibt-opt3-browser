@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Resource Model - representing  table "Resources" and its entities
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 namespace App\Models\Opt3;
 
 use App\Traits\Filterable;
@@ -19,11 +23,17 @@ class Resource extends Model
         GloballySearchable,
         HasContextChannels;
         
+    /* All possible types (forms) of Resource in manufacturing task */
     const TYPE_ALL = -1;
     const TYPE_MACHINE = 0;
     const TYPE_PERSONNEL = 2;
     const TYPE_TOOL = 3;
 
+    /**
+     * Types to names (string) mapping
+     *
+     * @var array
+     */
     static $types = [
         self::TYPE_MACHINE => 'Stroj',
         self::TYPE_PERSONNEL => 'Personál',
@@ -35,7 +45,12 @@ class Resource extends Model
     protected $table = 'resources';
     protected $primaryKey = 'sId';
     protected $keyType = 'string';
-
+    
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'sId', 'type', 'parallelType', 'maxICap',
         'parallelCap', 'maxDCap', 'matCapacity',
@@ -78,6 +93,12 @@ class Resource extends Model
         return str_replace(' ', '_', mb_strtolower($this->type(), 'UTF-8'));
     }
 
+    /**
+     * Set substitution position aka index to be used in short_id table
+     * overshadowing method from trait Namable
+     *
+     * @return string
+     */
     public function setSubstitutionPosition()
     {
         return self::where('type', $this->type)->get()->search(function ($model, $key) {
@@ -85,14 +106,30 @@ class Resource extends Model
         }) + 1;
     }
 
+    /**
+     * Returns resource type
+     *
+     * @return string
+     */
     public function type() {
         return self::$types[$this->type];
     }
-
+    
+    /**
+     * Checks whether resource is of type
+     *
+     * @param  mixed $type
+     * @return bool
+     */
     public function isType($type) {
         return $this->type == $type;
     }
-
+    
+    /**
+     * Returns all corresponding material events linked with material instance
+     *
+     * @return void
+     */
     public function resCalendar() {
         return $this->hasMany(ResCalendar::class, 'ressId', 'sId');
     }

@@ -1,7 +1,13 @@
 <div>
+    <!--
+        Specific Resource View - Fullpage Livewire Component
+        Controller for this component: App/Http/Livewire/Pages/Insights/ResourceInsight.php
+    
+        Author: Petr Vrtal (xvrtal01@stud.fit.vutbr.cz)
+    -->
     <x-slot name="header">
         <div class="flex items-center">
-            <livewire:atoms.return-navigation-button />
+            <livewire:molecules.return-navigation-button />
             <h2 class="font-semibold text-2xl">
                 Zdroj
             </h2>
@@ -16,6 +22,8 @@
         </div>
         <p class="uppercase font-semibold">{{ $resource->type() }}</p>
     </x-slot>
+
+    <x-molecules.loading-state-notification />
     
     <div class="container mx-auto">
         <div class="bg-white p-6 shadow-md rounded-md flex flex-col text-sm">
@@ -52,7 +60,7 @@
         </div>
 
         @if ($resource->contextChannels()->exists())
-            <div class="bg-theme-300 px-4 py-8 mt-8 rounded shadow-md">
+            <div class="bg-white px-4 py-8 mt-8 rounded shadow-md">
                 <h2 class="font-semibold mb-8">Kontextové kanály</h2>
                 <table class="w-full divide-y divide-gray-200 border-theme-600 border">
                     <thead class="bg-gray-50">

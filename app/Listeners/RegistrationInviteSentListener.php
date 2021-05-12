@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Listentener for invitation creation
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 namespace App\Listeners;
 
 use App\Events\RegistrationInviteCreated;
@@ -30,7 +34,9 @@ class RegistrationInviteSentListener
      */
     public function handle(RegistrationInviteCreated $event)
     {
+        // Create temporary signed route which expires after 24 hours after creation
         $signedUrl = URL::temporarySignedRoute('register', now()->addHours(24), ['token' => $event->invite->token]);
+        // Send email notification to address with signed route
         Notification::route('mail', $event->invite->email)->notify(new InviteNotification($signedUrl));
 
         return $signedUrl;

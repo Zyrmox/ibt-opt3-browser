@@ -30,6 +30,7 @@ module.exports = {
             colors: {
                 theme: {
                     900: '#3A3878',
+                    800: '#5c5b91',
                     600: '#D9DFF6',
                     500: '#5FBBFD',
                     400: '#EAEDF5',

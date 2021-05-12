@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Trait HasDBFileConnection
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 namespace App\Traits;
 
 use App\Models\DatabaseFile;

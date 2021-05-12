@@ -1,8 +1,11 @@
 <?php
+/**
+ * Web Routes file
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 
 use App\Http\Controllers\DeadlinesController;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,12 +23,24 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+/*
+| Section of application protected by Laravel Sanctum
+| Only authenticated users get passed the 'auth:sanctum' to other routes,
+| specified in the closure.
+*/
 Route::middleware(['auth:sanctum', 'verified', 'livewire'])->group(function(){
     Route::middleware(['has.files'])->group(function(){
+
+        /*
+        | Returns Dashboard view - default location after login / register
+        */
         Route::get('/dashboard', function () {
             return view('dashboard');
         })->name('dashboard');
     
+        /*
+        | Group of all database views implemented in the application
+        */
         Route::prefix('view')->group(function() {
             Route::get('/deadlines', App\Http\Livewire\Pages\Insights\VPDeadlinesInsight::class)->name('insights.vp-deadlines');
             Route::get('/vps', App\Http\Livewire\Pages\Insights\VPsInsight::class)->name('insights.vps');
@@ -41,11 +56,17 @@ Route::middleware(['auth:sanctum', 'verified', 'livewire'])->group(function(){
             Route::get('/log-opts', App\Http\Livewire\Pages\Insights\LogOpts::class)->name('insights.log-opts');
         });
         
+        /*
+        | Route returning deadlines in JSON format to be used in month calendar inside Production Orders Deadlines view
+        */
         Route::prefix('json')->group(function() {
             Route::get('/deadlines', [DeadlinesController::class, 'index'])->name('json.deadlines');
         });
     });
 
+    /*
+    | Route returning User Accounts view
+    */
     Route::prefix('user')->get('/uzivatelske-ucty', function () {
         return view('user-accounts');
     })->name('user.accounts');

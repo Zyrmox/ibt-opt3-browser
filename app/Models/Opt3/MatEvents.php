@@ -1,10 +1,13 @@
 <?php
-
+/**
+ * Material Events Model - representing table "MatEvents"
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 namespace App\Models\Opt3;
 
 use App\Traits\Filterable;
 use App\Traits\HasDBFileConnection;
-use App\Traits\Namable;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +16,6 @@ class MatEvents extends Model
 {
     use HasFactory,
         HasDBFileConnection,
-        // Namable,
         Filterable;
 
     const TYPE_SUPPLY = 0;
@@ -37,6 +39,11 @@ class MatEvents extends Model
         'Amount', 'tmConst'
     ];
 
+    /**
+     * Attributes to be filtered using Filterable trait
+     *
+     * @var array
+     */
     protected $filterable = [
         'type', 'whouseID', 'jobId',
         'Amount', 'tmConst'
@@ -82,9 +89,13 @@ class MatEvents extends Model
     {
         return "mat_event";
     }
-
+    
+    /**
+     * Returns operation, that is creating the material event
+     *
+     * @return void
+     */
     public function job() {
         return $this->belongsTo(Job::class, 'jobId');
-        // return $this->jobId ?: Job::find($this->jobId);
     }
 }

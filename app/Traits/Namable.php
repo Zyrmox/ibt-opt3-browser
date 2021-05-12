@@ -1,11 +1,16 @@
 <?php
-
+/**
+ * Trait Namable responsible for creating UUID substitutions for model
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 namespace App\Traits;
 
 trait Namable
 {
     protected function initializeNamable()
     {
+        // Apend the short_id attribute to model instance
         $this->append('short_id');
     }
 

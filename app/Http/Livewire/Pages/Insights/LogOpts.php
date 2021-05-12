@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Livewire Fullpage Component Controller - Displays All Options (Settings of scheduling software)
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 namespace App\Http\Livewire\Pages\Insights;
 
 use App\Models\Opt3\LogOpt;
@@ -20,6 +24,11 @@ class LogOpts extends Component
         $this->fetchLogOpts();
     }
     
+    /**
+     * Gets called on component mount
+     *
+     * @return void
+     */
     public function mount() {
         $this->currentUrl = url()->current();
         navigation()->clear();

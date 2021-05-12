@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Log Opt Model - representing settings of optimalization software from "LogOpts" table
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 namespace App\Models\Opt3;
 
 use App\Traits\Filterable;
@@ -14,6 +18,8 @@ class LogOpt extends Model
     protected $table = 'logopts';
     protected $primaryKey = 'optChar';
     protected $keyType = 'string';
+
+    const OPTION_DEFAULT_TYPE = 3;
         
     /**
      * The attributes that are mass assignable.
@@ -25,15 +31,20 @@ class LogOpt extends Model
     ];
 
     /**
-     * The attributes that are filterable.
+     * Attributes to be filtered using Filterable trait
      *
      * @var array
      */
     protected $filterable = [
         'optChar', 'optValue'
     ];
-
+    
+    /**
+     * Returns all options from database
+     *
+     * @return App\Models\Opt3\LogOpt
+     */
     public static function allOpts() {
-        return self::where('type', 3);
+        return self::where('type', self::OPTION_DEFAULT_TYPE);
     }
 }

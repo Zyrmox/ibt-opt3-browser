@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Livewire Fullpage Component Controller - Displaying Manufacturing Orders (česky VP)
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 namespace App\Http\Livewire\Pages\Insights;
 
 use App\Http\Livewire\Molecules\SubstitutionToggle;
@@ -21,6 +25,9 @@ class VPsInsight extends Component
     public $filterByType = self::FILTER_ALL;
     public $groupByPriority = self::GROUP_BY_PRIORITY_DESC;
     public $disableNonPriority = false;
+
+    public $displayedRecordsPerPriority;
+    public $totalRecordsPerPriority;
 
     const VIEW_VPS_TABLE = 'table';
     const VIEW_VPS_GROUPED_BY_PRIORITY = 'grouped-by-priority';
@@ -47,7 +54,12 @@ class VPsInsight extends Component
         self::GROUP_BY_PRIORITY_DESC => 'Podle priority sestupně',
         self::GROUP_BY_PRIORITY_ASC => 'Podle priority vzestupně',
     ];
-
+    
+    /**
+     * Automatically generate and manage query strings per defined variables
+     *
+     * @var array
+     */
     protected $queryString = [
         'paginationCount' => ['except' => self::PAGINATION_DEFAULT_COUNT],
         'view' => ['except' => self::VIEW_VPS_TABLE],
@@ -56,14 +68,34 @@ class VPsInsight extends Component
         'disableNonPriority' => ['except' => false],
     ];
 
+    /**
+     * Listens for these emmited events and calls coresponding class method
+     *
+     * @var array
+     */
     protected $listeners = [
         SubstitutionToggle::ONCHANGED_EVENT_KEY => 'substitutionToggleChanged',
     ];
     
+    /**
+     * Gets called on component mount
+     *
+     * @return void
+     */
     public function mount() {
         $this->substituted = SubstitutionToggle::state();
+        $this->displayedRecordsPerPriority = VP::ordersWithCountBasedOnPriority()->get()->values()->pluck('priority')->flip()->map(function(){
+            return 25;
+        });
+        $this->totalRecordsPerPriority = VP::ordersWithCountBasedOnPriority()->get()->values()->pluck('vps_count', 'priority');
     }
 
+    /**
+     * Updates substitution toggle value (state),
+     *
+     * @param  mixed $value new substitution toggle state
+     * @return void
+     */
     public function substitutionToggleChanged($value) {
         $this->substituted = $value;
     }
@@ -74,6 +106,14 @@ class VPsInsight extends Component
 
     public function updatedFilterByType() {
         $this->resetPage();
+    }
+
+    public function updateRecordsPerPriorityListAmount($priority) {
+        $this->displayedRecordsPerPriority->put($priority, $this->displayedRecordsPerPriority->get($priority) + 25);
+    }
+
+    public function getTotalRecordsPerPriorityCount($priority) {
+        return (int) $this->totalRecordsPerPriority->get($priority);
     }
 
     public function render()

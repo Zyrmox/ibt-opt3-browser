@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Custom Artisan Command to send registration invite for application
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -48,6 +52,7 @@ class SendRegisterInvite extends Command
                 $token = Str::random(40);
             } while (RegistrationInvite::where('token', $token)->first());
     
+            // insert invite in the database 
             $invite = RegistrationInvite::firstOrCreate([
                 'email' => $email
             ],
@@ -55,9 +60,11 @@ class SendRegisterInvite extends Command
                 'token' => $token,
             ]);
             
+            // Dispatch event to send the email
             $res = event(new RegistrationInviteCreated($invite));
             $link = $res[0];
 
+            // Print info message with generated registration link
             $this->info("Sent register invite to: {$email} \n[invitation url: {$link}] \n");
         }
     }

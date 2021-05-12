@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Livewire Component Controller - Substitution Toggle
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 namespace App\Http\Livewire\Molecules;
 
 use Livewire\Component;
@@ -12,7 +16,7 @@ class SubstitutionToggle extends Component
     public $substitute;
     
     /**
-     * Livewire component mount function
+     * Gets called on component mount
      *
      * @return void
      */

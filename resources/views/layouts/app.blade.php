@@ -1,3 +1,7 @@
+<!--
+	Main Application Layout - Blade Template
+	Author: Petr Vrtal (xvrtal01@stud.fit.vutbr.cz)
+-->
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -5,7 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'SQLite OPT3 Browser') }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -15,6 +19,8 @@
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
         @livewireStyles
+
+        <!-- Stack For all the styles pushed from subviews  -->
         @stack('styles')
 
         <!-- Scripts -->
@@ -22,19 +28,23 @@
     </head>
     <body class="font-sans antialiased">
         <main class="flex">
-            <livewire:layout.side-menu />
+            <!-- Side Menu (Composed of both Side Menu & Context Menu) -->
+            <livewire:organisms.side-menu />
     
             <div class="relative min-h-screen h-screen bg-gray-100 w-full overflow-hidden">
                 <div class="min-h-full max-h-screen overflow-y-auto px-6">
                     <div class="container mx-auto">
                         @if (!dbListEmpty())
-                            <!-- Global Search Field -->
+                            <!-- Navigation Bar -->
                             <div class="flex justify-between pt-12">
-                                <livewire:molecules.global-search-bar />
+                                <!-- Global Search Bar -->
+                                <livewire:organisms.global-search-bar />
+                                <!-- Substitution Toggle -->
                                 <livewire:molecules.substitution-toggle />
                             </div>
                         @endif
     
+                        <!-- Error Message Toast -->
                         @if (session()->has('error'))
                             <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" class="absolute top-12 w-1/2 right-6">
                                 <div x-show="show" class="flex justify-between items-center py-3 px-6 text-red-800 bg-red-100 rounded shadow-md"
@@ -64,7 +74,7 @@
                         <header class="pt-12 header flex justify-between items-center">
                             {{ $header }}
                         </header>
-                        <div class="py-12">
+                        <div class="py-12 text-sm">
                             {{ $slot }}
                         </div>
                     </div>
@@ -72,9 +82,13 @@
             </div>
         </main>
 
+        <!-- Stack for all Modals pushed from subviews -->
         @stack('modals')
 
+        <!-- Livewire Scripts to bootstrap it's frontend functionality -->
         @livewireScripts
+
+        <!-- Stack For all the <scripts> pushed from subviews  -->
         @stack('scripts')
     </body>
 </html>

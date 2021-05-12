@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * CProp Model - Represent Context channel
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 namespace App\Models;
 
 use App\Models\Opt3\Job;
@@ -41,6 +45,11 @@ class CProp extends Model
         'validityConst', 'cTableID', 'groupId', 'linkedId'
     ];
 
+    /**
+     * Attributes to be filtered using Filterable trait
+     *
+     * @var array
+     */
     protected $filterable = [
         'Type', 'refID', 'cChannel', 'reqValue', 'initValue',
         'schedConst', 'cTableID',

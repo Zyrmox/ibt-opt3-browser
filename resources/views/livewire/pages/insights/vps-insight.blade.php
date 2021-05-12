@@ -1,10 +1,15 @@
 <div>
+    <!--
+        Manufacturing orders (česky VP) View - Fullpage Livewire Component
+        Controller for this component: App/Http/Livewire/Pages/Insights/VPsInsight.php
+    
+        Author: Petr Vrtal (xvrtal01@stud.fit.vutbr.cz)
+    -->
     <x-slot name="header">
         <h2 class="font-semibold text-2xl sticky">
             {{ __('Výrobní příkazy') }}
         </h2>
     </x-slot>
-    
     
     <x-molecules.loading-state-notification />
     
@@ -71,7 +76,7 @@
         @if ($view == VPsInsight::VIEW_VPS_TABLE)
             <div class="mt-3">
                 @foreach ($vps as $key => $vp)
-                    <x-molecules.compressed-expandable-card wire:key="{{ $vp->sId }}" class="bg-white">
+                    <x-molecules.compressed-expandable-card wire:key="{{ $vp->sId }}" :expanded="true" class="bg-white">
                         <x-slot name="title">
                             <svg class="h-3 w-3 text-yellow-500" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="12" cy="12" r="12" fill="currentColor"/>
@@ -260,16 +265,14 @@
 
                         <x-slot name="header">
                             <span class="py-1 px-4 text-xs font-medium bg-theme-300 rounded-full text-theme-900 flex items-center border shadow-inner">
-                                Celkem výrobních operací:
+                                Celkový počet výrobních příkazů:
                                 <span class="ml-2 font-semibold">{{ count($group) }}</span>
                             </span>
                         </x-slot>
-
-                        {{-- {{ $vps->links() }} --}}
         
                         <div class="mt-6 mb-3">
-                            @foreach ($group as $key => $vp)
-                                <x-molecules.compressed-expandable-card wire:key="{{ 'priority.group.' . $priority . 'vp' . $vp->sId }}" class="bg-white">
+                            @foreach (VP::withPriority($priority)->take($this->displayedRecordsPerPriority->get($priority))->get() as $key => $vp)
+                                <x-molecules.compressed-expandable-card wire:key="{{ 'priority.group.' . $priority . 'vp' . $vp->sId }}" :expanded="true" class="bg-white">
                                     <x-slot name="title">
                                         <svg class="h-3 w-3 text-yellow-500" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <circle cx="12" cy="12" r="12" fill="currentColor"/>
@@ -395,6 +398,15 @@
                                     @endif
                                 </x-molecules.compressed-expandable-card>
                             @endforeach
+
+                            @if ($this->getTotalRecordsPerPriorityCount($priority) > $displayedRecordsPerPriority->get($priority))
+                                <div class="mt-4 flex flex-col justify-center items-center">
+                                    <button wire:click="updateRecordsPerPriorityListAmount('{{ $priority }}')" class="py-3 px-6 font-semibold text-xs uppercase bg-theme-900 text-white">Načíst další záznamy</button>
+                                    <div class="mt-4">
+                                        Zobrazeno <span class="font-medium">{{ count(VP::withPriority($priority)->take($this->displayedRecordsPerPriority->get($priority))->get()) }} z {{ $this->getTotalRecordsPerPriorityCount($priority) }} celkových záznamů</span>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </x-molecules.compressed-expandable-card>
                 @endforeach

@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Short ID Model - Represent Substitution
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;

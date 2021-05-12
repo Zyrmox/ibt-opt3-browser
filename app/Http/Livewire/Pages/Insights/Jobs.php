@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Livewire Fullpage Component Controller - Displays all Jobs occuring in manufacturing task
+ *
+ * @author Petr Vrtal <xvrtal01@fit.vutbr.cz>
+ */
 namespace App\Http\Livewire\Pages\Insights;
 
 use App\Http\Livewire\Molecules\SubstitutionToggle;
@@ -35,15 +39,30 @@ class Jobs extends Component
         self::TYPE_COOPS => Job::TYPE_COOPERATION
     ];
 
+    /**
+     * Automatically generate and manage query strings per defined variables
+     *
+     * @var array
+     */
     protected $queryString = [
         'paginationCount' => ['except' => self::PAGINATION_DEFAULT_COUNT],
         'filterByType' => ['except' => self::TYPE_ALL],
     ];
 
+    /**
+     * Listens for these emmited events and calls coresponding class method
+     *
+     * @var array
+     */
     protected $listeners = [
         SubstitutionToggle::ONCHANGED_EVENT_KEY => 'substitutionToggleChanged',
     ];
     
+    /**
+     * Gets called on component mount
+     *
+     * @return void
+     */
     public function mount() {
         $this->currentUrl = url()->current();
         navigation()->clear();
@@ -51,6 +70,12 @@ class Jobs extends Component
         $this->substituted = SubstitutionToggle::state();
     }
 
+    /**
+     * Updates substitution toggle value (state),
+     *
+     * @param  mixed $value new substitution toggle state
+     * @return void
+     */
     public function substitutionToggleChanged($value) {
         $this->substituted = $value;
     }

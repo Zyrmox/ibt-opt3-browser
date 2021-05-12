@@ -7,11 +7,11 @@
 
     <div>
         <div class="container mx-auto pb-12">
-            @livewire('create-invitation-form')
+            @livewire('organisms.create-invitation-form')
 
             <x-jet-section-border />
 
-            @livewire('invitations-form')
+            @livewire('organisms.invitations-form')
         </div>
     </div>
 </x-app-layout>
